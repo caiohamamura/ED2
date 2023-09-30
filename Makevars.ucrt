@@ -1,0 +1,306 @@
+PKG_CFLAGS = -I"ED/src/include" -I"${RTOOLS43_HOME}/usr/include"
+PKG_FFLAGS = -I"ED/src/include" -I"${RTOOLS43_HOME}/mingw64/include" -ffree-line-length-none  -fno-whole-file
+PKG_LIBS = -L"${RTOOLS43_HOME}/mingw64/lib" -lgfortran -lm -lquadmath -lhdf5_fortran -L"${RTOOLS43_HOME}/usr/lib" -lc
+F90_FLAGS = -DUSE_INTERF=1 -DUSENC=0 -DPC_LINUX1 -DGNU -DUSE_COLLECTIVE_MPIO=0 -DUSE_MPIWTIME=1
+FC = gfortran
+CC = gcc
+
+OBJECTS = ED/src/utils/utils_c.o \
+	ED/src/dynamics/rk4_copy_patch.o \
+	ED/src/init/ed_init_atm.o \
+	ED/src/memory/ed_mem_alloc.o \
+	ED/src/dynamics/rk4_derivs.o \
+	ED/src/utils/ed_grid.o \
+	ED/src/utils/dateutils.o \
+	ED/src/utils/fatal_error.o \
+	ED/src/utils/radiate_utils.o \
+	ED/src/memory/hdf5_coms.o \
+	ED/src/dynamics/bdf2_solver.o \
+	ED/src/init/landuse_init.o \
+	ED/src/dynamics/mortality.o \
+	ED/src/mpi/ed_para_coms.o \
+	ED/src/utils/charutils.o \
+	ED/src/memory/canopy_layer_coms.o \
+	ED/src/dynamics/farq_leuning.o \
+	ED/src/memory/canopy_radiation_coms.o \
+	ED/src/io/ed_opspec.o \
+	ED/src/dynamics/rk4_misc.o \
+	ED/src/utils/ed_filelist.o \
+	ED/src/utils/libxml2f90.f90_pp.o \
+	ED/src/dynamics/soil_respiration.o \
+	ED/src/dynamics/reproduction.o \
+	ED/src/dynamics/heun_driver.o \
+	ED/src/init/ed_bigleaf_init.o \
+	ED/src/init/ed_type_init.o \
+	ED/src/dynamics/old_twostream_rad.o \
+	ED/src/dynamics/vegetation_dynamics.o \
+	ED/src/dynamics/hybrid_driver.o \
+	ED/src/utils/numutils.o \
+	ED/src/io/average_utils.o \
+	ED/src/init/ed_init.o \
+	ED/src/mpi/ed_node_coms.o \
+	ED/src/dynamics/disturbance.o \
+	ED/src/driver/ed_met_driver.o \
+	ED/src/io/ed_read_ed10_20_history.o \
+	ED/src/dynamics/plant_hydro.o \
+	ED/src/dynamics/lsm_hyd.o \
+	ED/src/driver/ed_1st.o \
+	ED/src/init/ed_params.o \
+	ED/src/dynamics/structural_growth.o \
+	ED/src/mpi/ed_mpass_init.o \
+	ED/src/io/ed_load_namelist.o \
+	ED/src/memory/ed_state_vars.o \
+	ED/src/memory/fusion_fission_coms.o \
+	ED/src/memory/hydrology_constants.o \
+	ED/src/dynamics/rk4_integ_utils.o \
+	ED/src/utils/update_derived_utils.o \
+	ED/src/memory/ed_var_tables.o \
+	ED/src/dynamics/photosyn_driv.o \
+	ED/src/io/ed_xml_config.o \
+	ED/src/memory/phenology_coms.o \
+	ED/src/dynamics/growth_balive.o \
+	ED/src/memory/disturb_coms.o \
+	ED/src/memory/decomp_coms.o \
+	ED/src/memory/grid_coms.o \
+	ED/src/memory/c34constants.o \
+	ED/src/memory/ed_misc_coms.o \
+	ED/src/dynamics/canopy_struct_dynamics.o \
+	ED/src/io/ed_init_history.o \
+	ED/src/dynamics/stem_resp_driv.o \
+	ED/src/memory/ed_work_vars.o \
+	ED/src/memory/physiology_coms.o \
+	ED/src/dynamics/radiate_driver.o \
+	ED/src/dynamics/farq_katul.o \
+	ED/src/dynamics/fire.o \
+	ED/src/io/edio.o \
+	ED/src/utils/fuse_fiss_utils.o \
+	ED/src/init/phenology_startup.o \
+	ED/src/utils/hdf5_utils.o \
+	ED/src/io/h5_output.o \
+	ED/src/utils/ed_cn_utils.o \
+	ED/src/utils/therm_lib8.o \
+	ED/src/io/ed_read_ed21_history.o \
+	ED/src/memory/ename_coms.o \
+	ED/src/memory/canopy_air_coms.o \
+	ED/src/dynamics/multiple_scatter.o \
+	ED/src/utils/ed_therm_lib.o \
+	ED/src/utils/random_utils.o \
+	ED/src/driver/ed_driver.o \
+	ED/src/init/ed_nbg_init.o \
+	ED/src/io/leaf_database.o \
+	ED/src/dynamics/phenology_driv.o \
+	ED/src/dynamics/events.o \
+	ED/src/memory/rk4_coms.o \
+	ED/src/dynamics/twostream_rad.o \
+	ED/src/memory/hydrology_coms.o \
+	ED/src/memory/soil_coms.o \
+	ED/src/utils/stable_cohorts.o \
+	ED/src/utils/invmondays.o \
+	ED/src/utils/lapse.o \
+	ED/src/dynamics/forestry.o \
+	ED/src/utils/hrzshade_utils.o \
+	ED/src/driver/ed_model.o \
+	ED/src/dynamics/phenology_aux.o \
+	ED/src/memory/consts_coms.o \
+	ED/src/utils/rsys.o \
+	ED/src/memory/detailed_coms.o \
+	ED/src/io/ed_print.o \
+	ED/src/utils/allometry.o \
+	ED/src/utils/utils_f.o \
+	ED/src/dynamics/euler_driver.o \
+	ED/src/memory/met_driver_coms.o \
+	ED/src/memory/mem_polygons.o \
+	ED/src/utils/great_circle.o \
+	ED/src/memory/pft_coms.o \
+	ED/src/dynamics/rk4_driver.o \
+	ED/src/mpi/ed_para_init.o \
+	ED/src/utils/therm_lib.o \
+	ED/src/utils/budget_utils.o \
+	ED/src/memory/ed_max_dims.o
+
+all: librED.a edmain2.o
+	echo 'ok' #/c/rtools43/mingw64/bin/gfortran.exe -shared -s -static-libgcc -o rED2.dll edmain2.o -L. -lrED $(PKG_LIBS) -lR
+	/c/rtools43/mingw64/bin/gfortran.exe $(SHLIB_LDFLAGS) $(DLLFLAGS) -o rED2.dll edmain2.o $(ALL_LIBS) -L. -lrED
+
+clean:
+	find . -type f -name '*.o' -delete
+	rm *.mod
+	rm *.a
+	rm test.dll
+
+ED/src/memory/ed_max_dims.o: ED/src/memory/ed_max_dims.F90
+	$(FC) $(ALL_FCFLAGS) -c  $< -o test.dll && $(FC) $(ALL_FCFLAGS) $(F90_FLAGS) -c  $< -o $@
+
+ED/src/memory/ed_state_vars.o: ED/src/memory/ed_state_vars.F90
+	$(FC) $(ALL_FCFLAGS) -c  $< -o test.dll && $(FC) $(ALL_FCFLAGS) -c  $< -o $@
+
+ED/src/memory/soil_coms.o: ED/src/memory/soil_coms.F90
+	$(FC) $(ALL_FCFLAGS) -c  $< -o test.dll && $(FC) $(ALL_FCFLAGS) -c  $< -o $@
+
+ED/src/memory/consts_coms.o: ED/src/memory/consts_coms.F90
+	$(FC) $(ALL_FCFLAGS) -c  $< -o test.dll && $(FC) $(ALL_FCFLAGS) -c  $< -o $@
+
+ED/src/utils/fatal_error.o: ED/src/utils/fatal_error.F90
+	$(FC) $(ALL_FCFLAGS) -c  $< -o test.dll && $(FC) $(ALL_FCFLAGS) -c  $< -o $@
+
+ED/src/driver/ed_1st.o: ED/src/driver/ed_1st.F90
+	$(FC) $(ALL_FCFLAGS) -c  $< -o test.dll && $(FC) $(ALL_FCFLAGS) -c  $< -o $@
+
+ED/src/utils/rsys.o: ED/src/utils/rsys.F90
+	$(FC) $(ALL_FCFLAGS) -c  $< -o test.dll && $(FC) $(ALL_FCFLAGS) -c  $< -o $@
+
+ED/src/driver/edmain.o: ED/src/driver/edmain.F90
+	$(FC) $(ALL_FCFLAGS) -c  $< -o test.dll && $(FC) $(ALL_FCFLAGS) -c  $< -o $@
+
+ED/src/utils/random_utils.o: ED/src/utils/random_utils.F90
+	$(FC) $(ALL_FCFLAGS) -c  $< -o test.dll && $(FC) $(ALL_FCFLAGS) -c  $< -o $@
+
+ED/src/utils/ed_filelist.o: ED/src/utils/ed_filelist.F90
+	$(FC) $(ALL_FCFLAGS) -c  $< -o test.dll && $(FC) $(ALL_FCFLAGS) -c  $< -o $@
+
+ED/src/utils/libxml2o.o: ED/src/utils/libxml2o.F90
+	$(FC) $(ALL_FCFLAGS) -c  $< -o test.dll && $(FC) $(ALL_FCFLAGS) -c  $< -o $@
+
+ED/src/mpi/ed_mpass_init.o: ED/src/mpi/ed_mpass_init.F90
+	$(FC) $(ALL_FCFLAGS) -c  $< -o test.dll && $(FC) $(ALL_FCFLAGS) -c  $< -o $@
+
+ED/src/io/ed_opspec.o: ED/src/io/ed_opspec.F90
+	$(FC) $(ALL_FCFLAGS) -c  $< -o test.dll && $(FC) $(ALL_FCFLAGS) -c  $< -o $@
+
+ED/src/io/h5_output.o: ED/src/io/h5_output.F90
+	$(FC) $(ALL_FCFLAGS) -c  $< -o test.dll && $(FC) $(ALL_FCFLAGS) -c  $< -o $@
+
+ED/src/driver/ed_driver.o: ED/src/driver/ed_driver.F90
+	$(FC) $(ALL_FCFLAGS) -c  $< -o test.dll && $(FC) $(ALL_FCFLAGS) -c  $< -o $@
+
+ED/src/driver/ed_model.o: ED/src/driver/ed_model.F90
+	$(FC) $(ALL_FCFLAGS) -c  $< -o test.dll && $(FC) $(ALL_FCFLAGS) -c  $< -o $@
+
+ED/src/io/ed_print.o: ED/src/io/ed_print.F90
+	$(FC) $(ALL_FCFLAGS) -c  $< -o test.dll && $(FC) $(ALL_FCFLAGS) -c  $< -o $@
+
+ED/src/init/ed_init.o: ED/src/init/ed_init.F90
+	$(FC) $(ALL_FCFLAGS) -c  $< -o test.dll && $(FC) $(ALL_FCFLAGS) -c  $< -o $@
+
+ED/src/init/ed_init_atm.o: ED/src/init/ed_init_atm.F90
+	$(FC) $(ALL_FCFLAGS) -c  $< -o test.dll && $(FC) $(ALL_FCFLAGS) -c  $< -o $@
+
+ED/src/dynamics/rk4_driver.o: ED/src/dynamics/rk4_driver.F90
+	$(FC) $(ALL_FCFLAGS) -c  $< -o test.dll && $(FC) $(ALL_FCFLAGS) -c  $< -o $@
+
+librED2.a: $(OBJECTS)
+
+
+
+ED/src/dynamics/rk4_copy_patch.o: ED/src/dynamics/rk4_misc.o ED/src/utils/ed_therm_lib.o ED/src/utils/therm_lib8.o ED/src/dynamics/canopy_struct_dynamics.o ED/src/dynamics/plant_hydro.o ED/src/utils/therm_lib.o ED/src/utils/fatal_error.o ED/src/memory/ed_state_vars.o ED/src/memory/grid_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/consts_coms.o ED/src/memory/rk4_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/canopy_air_coms.o ED/src/utils/budget_utils.o ED/src/memory/soil_coms.o ED/src/memory/phenology_coms.o ED/src/memory/physiology_coms.o ED/src/utils/allometry.o ED/src/memory/disturb_coms.o
+ED/src/init/ed_init_atm.o: ED/src/memory/canopy_layer_coms.o ED/src/utils/update_derived_utils.o ED/src/utils/ed_therm_lib.o ED/src/utils/stable_cohorts.o ED/src/utils/fatal_error.o ED/src/dynamics/canopy_struct_dynamics.o ED/src/utils/fuse_fiss_utils.o ED/src/utils/hrzshade_utils.o ED/src/memory/ed_misc_coms.o ED/src/memory/ed_state_vars.o ED/src/memory/soil_coms.o ED/src/memory/consts_coms.o ED/src/memory/grid_coms.o ED/src/mpi/ed_node_coms.o ED/src/mpi/ed_para_coms.o ED/src/utils/therm_lib.o ED/src/memory/met_driver_coms.o ED/src/memory/canopy_radiation_coms.o ED/src/memory/fusion_fission_coms.o
+ED/src/memory/ed_mem_alloc.o: ED/src/utils/fatal_error.o ED/src/memory/ed_work_vars.o ED/src/memory/ed_state_vars.o ED/src/utils/ed_grid.o ED/src/memory/ed_max_dims.o ED/src/memory/grid_coms.o ED/src/memory/mem_polygons.o ED/src/mpi/ed_node_coms.o
+ED/src/dynamics/rk4_derivs.o: ED/src/memory/rk4_coms.o ED/src/utils/fatal_error.o ED/src/memory/ed_state_vars.o ED/src/memory/grid_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/consts_coms.o ED/src/memory/soil_coms.o ED/src/utils/therm_lib8.o ED/src/memory/ed_misc_coms.o ED/src/memory/physiology_coms.o ED/src/dynamics/canopy_struct_dynamics.o ED/src/utils/budget_utils.o
+ED/src/utils/ed_grid.o: ED/src/memory/grid_coms.o ED/src/mpi/ed_node_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/consts_coms.o
+ED/src/utils/dateutils.o: ED/src/memory/consts_coms.o
+ED/src/utils/fatal_error.o: ED/src/mpi/ed_node_coms.o
+ED/src/utils/radiate_utils.o: ED/src/utils/update_derived_utils.o ED/src/memory/ed_state_vars.o ED/src/memory/met_driver_coms.o ED/src/memory/canopy_radiation_coms.o ED/src/memory/consts_coms.o ED/src/memory/phenology_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/ed_misc_coms.o
+ED/src/dynamics/bdf2_solver.o: ED/src/utils/therm_lib8.o ED/src/utils/ed_therm_lib.o ED/src/memory/grid_coms.o ED/src/memory/rk4_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/ed_state_vars.o ED/src/memory/consts_coms.o ED/src/memory/soil_coms.o
+ED/src/init/landuse_init.o: ED/src/utils/fatal_error.o ED/src/utils/ed_filelist.o ED/src/memory/ed_state_vars.o ED/src/memory/consts_coms.o ED/src/memory/disturb_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/grid_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/detailed_coms.o
+ED/src/dynamics/mortality.o: ED/src/memory/ed_state_vars.o ED/src/memory/pft_coms.o ED/src/memory/disturb_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/physiology_coms.o ED/src/memory/consts_coms.o
+ED/src/mpi/ed_para_coms.o: ED/src/memory/ed_max_dims.o
+ED/src/utils/charutils.o: 
+ED/src/memory/canopy_layer_coms.o: 
+ED/src/dynamics/farq_leuning.o: ED/src/utils/fatal_error.o ED/src/memory/c34constants.o ED/src/utils/therm_lib8.o ED/src/memory/rk4_coms.o ED/src/memory/pft_coms.o ED/src/memory/physiology_coms.o ED/src/memory/consts_coms.o
+ED/src/memory/canopy_radiation_coms.o: ED/src/memory/ed_max_dims.o
+ED/src/io/ed_opspec.o: ED/src/utils/fatal_error.o ED/src/driver/ed_driver.o ED/src/memory/ed_max_dims.o ED/src/memory/grid_coms.o ED/src/memory/mem_polygons.o ED/src/memory/soil_coms.o ED/src/mpi/ed_para_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/consts_coms.o ED/src/memory/canopy_air_coms.o ED/src/memory/physiology_coms.o ED/src/memory/decomp_coms.o ED/src/memory/disturb_coms.o ED/src/memory/phenology_coms.o ED/src/memory/pft_coms.o ED/src/memory/canopy_layer_coms.o ED/src/memory/canopy_radiation_coms.o ED/src/memory/rk4_coms.o ED/src/memory/detailed_coms.o ED/src/memory/fusion_fission_coms.o ED/src/memory/met_driver_coms.o
+ED/src/dynamics/rk4_misc.o: ED/src/utils/therm_lib8.o ED/src/utils/ed_therm_lib.o ED/src/dynamics/canopy_struct_dynamics.o ED/src/utils/fatal_error.o ED/src/utils/therm_lib.o ED/src/dynamics/plant_hydro.o ED/src/memory/rk4_coms.o ED/src/memory/ed_state_vars.o ED/src/memory/soil_coms.o ED/src/memory/grid_coms.o ED/src/memory/consts_coms.o ED/src/utils/budget_utils.o ED/src/memory/ed_misc_coms.o ED/src/memory/physiology_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/pft_coms.o
+ED/src/utils/ed_filelist.o: ED/src/utils/fatal_error.o ED/src/memory/ed_max_dims.o
+ED/src/dynamics/soil_respiration.o: ED/src/utils/rsys.o ED/src/utils/therm_lib.o ED/src/utils/fatal_error.o ED/src/memory/ed_state_vars.o ED/src/memory/soil_coms.o ED/src/memory/decomp_coms.o ED/src/memory/consts_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/grid_coms.o ED/src/memory/pft_coms.o ED/src/dynamics/farq_leuning.o ED/src/memory/rk4_coms.o ED/src/memory/physiology_coms.o ED/src/utils/budget_utils.o
+ED/src/dynamics/reproduction.o: ED/src/memory/pft_coms.o ED/src/utils/fuse_fiss_utils.o ED/src/dynamics/phenology_aux.o ED/src/memory/ed_state_vars.o ED/src/init/ed_type_init.o ED/src/utils/update_derived_utils.o ED/src/utils/allometry.o ED/src/utils/ed_therm_lib.o ED/src/dynamics/plant_hydro.o ED/src/utils/stable_cohorts.o ED/src/utils/fatal_error.o ED/src/memory/met_driver_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/phenology_coms.o ED/src/memory/mem_polygons.o ED/src/memory/consts_coms.o ED/src/memory/grid_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/fusion_fission_coms.o ED/src/memory/physiology_coms.o
+ED/src/dynamics/heun_driver.o: ED/src/dynamics/rk4_integ_utils.o ED/src/memory/rk4_coms.o ED/src/dynamics/rk4_misc.o ED/src/dynamics/plant_hydro.o ED/src/dynamics/photosyn_driv.o ED/src/dynamics/stem_resp_driv.o ED/src/dynamics/soil_respiration.o ED/src/utils/budget_utils.o ED/src/dynamics/rk4_copy_patch.o ED/src/utils/update_derived_utils.o ED/src/dynamics/rk4_derivs.o ED/src/mpi/ed_para_coms.o ED/src/memory/ed_state_vars.o ED/src/memory/met_driver_coms.o ED/src/memory/grid_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/ed_max_dims.o ED/src/utils/therm_lib.o ED/src/memory/soil_coms.o ED/src/memory/consts_coms.o ED/src/utils/therm_lib8.o
+ED/src/init/ed_bigleaf_init.o: ED/src/memory/ed_state_vars.o ED/src/utils/allometry.o ED/src/init/ed_type_init.o ED/src/utils/fuse_fiss_utils.o ED/src/mpi/ed_node_coms.o ED/src/memory/grid_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/pft_coms.o ED/src/memory/consts_coms.o ED/src/memory/physiology_coms.o
+ED/src/init/ed_type_init.o: ED/src/dynamics/plant_hydro.o ED/src/utils/ed_cn_utils.o ED/src/utils/therm_lib.o ED/src/utils/ed_therm_lib.o ED/src/memory/ed_state_vars.o ED/src/utils/allometry.o ED/src/memory/pft_coms.o ED/src/memory/canopy_air_coms.o ED/src/memory/rk4_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/phenology_coms.o ED/src/memory/consts_coms.o ED/src/memory/physiology_coms.o ED/src/memory/soil_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/grid_coms.o
+ED/src/dynamics/old_twostream_rad.o: ED/src/memory/ed_max_dims.o ED/src/memory/rk4_coms.o ED/src/memory/canopy_radiation_coms.o ED/src/memory/consts_coms.o
+ED/src/dynamics/vegetation_dynamics.o: ED/src/dynamics/events.o ED/src/io/average_utils.o ED/src/dynamics/phenology_driv.o ED/src/dynamics/growth_balive.o ED/src/utils/update_derived_utils.o ED/src/dynamics/structural_growth.o ED/src/dynamics/reproduction.o ED/src/dynamics/fire.o ED/src/dynamics/soil_respiration.o ED/src/dynamics/disturbance.o ED/src/utils/budget_utils.o ED/src/utils/fuse_fiss_utils.o ED/src/utils/hrzshade_utils.o ED/src/utils/ed_cn_utils.o ED/src/memory/grid_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/ed_state_vars.o ED/src/memory/consts_coms.o ED/src/memory/mem_polygons.o ED/src/memory/canopy_radiation_coms.o ED/src/memory/fusion_fission_coms.o
+ED/src/dynamics/hybrid_driver.o: ED/src/dynamics/rk4_integ_utils.o ED/src/memory/rk4_coms.o ED/src/dynamics/rk4_misc.o ED/src/dynamics/plant_hydro.o ED/src/dynamics/photosyn_driv.o ED/src/dynamics/stem_resp_driv.o ED/src/dynamics/soil_respiration.o ED/src/utils/budget_utils.o ED/src/dynamics/rk4_copy_patch.o ED/src/utils/update_derived_utils.o ED/src/dynamics/rk4_derivs.o ED/src/utils/fatal_error.o ED/src/dynamics/bdf2_solver.o ED/src/mpi/ed_para_coms.o ED/src/memory/ed_state_vars.o ED/src/memory/met_driver_coms.o ED/src/memory/grid_coms.o ED/src/memory/ed_misc_coms.o ED/src/utils/therm_lib.o ED/src/memory/soil_coms.o ED/src/memory/consts_coms.o ED/src/utils/therm_lib8.o
+ED/src/utils/numutils.o: ED/src/utils/fatal_error.o ED/src/memory/consts_coms.o
+ED/src/io/average_utils.o: ED/src/utils/therm_lib.o ED/src/utils/invmondays.o ED/src/memory/ed_state_vars.o ED/src/memory/grid_coms.o ED/src/memory/consts_coms.o ED/src/memory/soil_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/met_driver_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/physiology_coms.o
+ED/src/init/ed_init.o: ED/src/utils/fatal_error.o ED/src/memory/ed_state_vars.o ED/src/init/ed_nbg_init.o ED/src/init/ed_bigleaf_init.o ED/src/utils/ed_grid.o ED/src/io/ed_read_ed10_20_history.o ED/src/utils/numutils.o ED/src/utils/dateutils.o ED/src/memory/grid_coms.o ED/src/memory/ed_work_vars.o ED/src/mpi/ed_node_coms.o ED/src/memory/soil_coms.o ED/src/memory/mem_polygons.o ED/src/memory/ed_misc_coms.o ED/src/init/phenology_startup.o ED/src/init/landuse_init.o ED/src/memory/rk4_coms.o ED/src/memory/consts_coms.o ED/src/memory/ed_max_dims.o
+ED/src/mpi/ed_node_coms.o: ED/src/memory/ed_max_dims.o
+ED/src/dynamics/disturbance.o: ED/src/dynamics/forestry.o ED/src/memory/ed_state_vars.o ED/src/utils/update_derived_utils.o ED/src/utils/fuse_fiss_utils.o ED/src/init/ed_type_init.o ED/src/dynamics/mortality.o ED/src/utils/stable_cohorts.o ED/src/dynamics/phenology_aux.o ED/src/utils/allometry.o ED/src/utils/ed_therm_lib.o ED/src/dynamics/plant_hydro.o ED/src/memory/met_driver_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/disturb_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/mem_polygons.o ED/src/memory/grid_coms.o ED/src/memory/pft_coms.o ED/src/memory/consts_coms.o ED/src/memory/detailed_coms.o ED/src/memory/fusion_fission_coms.o ED/src/utils/therm_lib.o
+ED/src/driver/ed_met_driver.o: ED/src/utils/fatal_error.o ED/src/utils/charutils.o ED/src/utils/lapse.o ED/src/utils/random_utils.o ED/src/utils/hdf5_utils.o ED/src/utils/update_derived_utils.o ED/src/utils/radiate_utils.o ED/src/memory/ed_max_dims.o ED/src/memory/met_driver_coms.o ED/src/memory/canopy_air_coms.o ED/src/memory/ed_state_vars.o ED/src/memory/grid_coms.o ED/src/memory/consts_coms.o ED/src/memory/ed_misc_coms.o ED/src/mpi/ed_node_coms.o ED/src/memory/canopy_radiation_coms.o ED/src/memory/pft_coms.o ED/src/utils/therm_lib.o
+ED/src/io/ed_read_ed10_20_history.o: ED/src/utils/ed_filelist.o ED/src/utils/fatal_error.o ED/src/memory/ed_state_vars.o ED/src/utils/numutils.o ED/src/utils/update_derived_utils.o ED/src/utils/allometry.o ED/src/init/ed_type_init.o ED/src/utils/fuse_fiss_utils.o ED/src/memory/ed_max_dims.o ED/src/memory/pft_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/consts_coms.o ED/src/memory/grid_coms.o ED/src/memory/disturb_coms.o ED/src/memory/decomp_coms.o ED/src/memory/phenology_coms.o ED/src/memory/physiology_coms.o
+ED/src/dynamics/plant_hydro.o: ED/src/utils/fatal_error.o ED/src/utils/invmondays.o ED/src/memory/ed_state_vars.o ED/src/memory/ed_misc_coms.o ED/src/memory/soil_coms.o ED/src/memory/grid_coms.o ED/src/memory/consts_coms.o ED/src/utils/allometry.o ED/src/memory/physiology_coms.o ED/src/memory/pft_coms.o ED/src/memory/rk4_coms.o
+ED/src/dynamics/lsm_hyd.o: ED/src/utils/therm_lib.o ED/src/utils/fatal_error.o ED/src/memory/hydrology_constants.o ED/src/memory/grid_coms.o ED/src/memory/ed_state_vars.o ED/src/mpi/ed_node_coms.o ED/src/memory/hydrology_coms.o ED/src/memory/soil_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/consts_coms.o ED/src/memory/pft_coms.o
+ED/src/driver/ed_1st.o: ED/src/io/ed_load_namelist.o ED/src/driver/ed_met_driver.o ED/src/io/leaf_database.o ED/src/mpi/ed_mpass_init.o ED/src/mpi/ed_para_init.o ED/src/memory/ed_mem_alloc.o ED/src/mpi/ed_para_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/ed_state_vars.o
+ED/src/init/ed_params.o: ED/src/utils/fatal_error.o ED/src/memory/soil_coms.o ED/src/dynamics/plant_hydro.o ED/src/memory/canopy_layer_coms.o ED/src/io/ed_xml_config.o ED/src/utils/ed_therm_lib.o ED/src/memory/ed_max_dims.o ED/src/memory/pft_coms.o ED/src/memory/disturb_coms.o ED/src/memory/grid_coms.o ED/src/memory/consts_coms.o ED/src/memory/decomp_coms.o ED/src/memory/fusion_fission_coms.o ED/src/memory/detailed_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/physiology_coms.o ED/src/memory/met_driver_coms.o ED/src/memory/hydrology_coms.o ED/src/memory/phenology_coms.o ED/src/memory/canopy_radiation_coms.o ED/src/utils/allometry.o ED/src/memory/canopy_air_coms.o ED/src/memory/rk4_coms.o ED/src/utils/budget_utils.o ED/src/dynamics/farq_leuning.o
+ED/src/dynamics/structural_growth.o: ED/src/utils/update_derived_utils.o ED/src/utils/ed_therm_lib.o ED/src/dynamics/plant_hydro.o ED/src/utils/stable_cohorts.o ED/src/utils/allometry.o ED/src/utils/fatal_error.o ED/src/memory/ed_state_vars.o ED/src/memory/pft_coms.o ED/src/memory/disturb_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/ed_misc_coms.o ED/src/memory/physiology_coms.o ED/src/utils/fuse_fiss_utils.o ED/src/memory/consts_coms.o ED/src/utils/budget_utils.o
+ED/src/mpi/ed_mpass_init.o: ED/src/utils/fatal_error.o ED/src/utils/numutils.o ED/src/memory/ed_work_vars.o ED/src/memory/ed_mem_alloc.o ED/src/mpi/ed_para_coms.o ED/src/mpi/ed_node_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/ed_misc_coms.o ED/src/memory/canopy_air_coms.o ED/src/memory/grid_coms.o ED/src/memory/soil_coms.o ED/src/memory/met_driver_coms.o ED/src/memory/mem_polygons.o ED/src/memory/physiology_coms.o ED/src/memory/phenology_coms.o ED/src/memory/decomp_coms.o ED/src/memory/pft_coms.o ED/src/memory/disturb_coms.o ED/src/memory/canopy_layer_coms.o ED/src/memory/canopy_radiation_coms.o ED/src/memory/rk4_coms.o ED/src/memory/detailed_coms.o ED/src/memory/fusion_fission_coms.o ED/src/memory/ed_state_vars.o
+ED/src/io/ed_load_namelist.o: ED/src/utils/fatal_error.o ED/src/memory/ename_coms.o ED/src/utils/dateutils.o ED/src/utils/numutils.o ED/src/utils/ed_filelist.o ED/src/memory/ed_max_dims.o ED/src/memory/soil_coms.o ED/src/memory/met_driver_coms.o ED/src/memory/mem_polygons.o ED/src/memory/physiology_coms.o ED/src/memory/phenology_coms.o ED/src/memory/decomp_coms.o ED/src/memory/disturb_coms.o ED/src/memory/pft_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/grid_coms.o ED/src/memory/canopy_air_coms.o ED/src/memory/canopy_layer_coms.o ED/src/memory/canopy_radiation_coms.o ED/src/memory/rk4_coms.o ED/src/mpi/ed_para_coms.o ED/src/memory/detailed_coms.o ED/src/memory/consts_coms.o ED/src/memory/fusion_fission_coms.o
+ED/src/memory/ed_state_vars.o: ED/src/utils/fatal_error.o ED/src/memory/ed_var_tables.o ED/src/memory/grid_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/disturb_coms.o ED/src/memory/met_driver_coms.o ED/src/memory/fusion_fission_coms.o ED/src/memory/phenology_coms.o ED/src/memory/ed_misc_coms.o ED/src/mpi/ed_node_coms.o ED/src/memory/soil_coms.o
+ED/src/memory/fusion_fission_coms.o: ED/src/memory/ed_max_dims.o
+ED/src/memory/hydrology_constants.o: 
+ED/src/dynamics/rk4_integ_utils.o: ED/src/dynamics/rk4_copy_patch.o ED/src/dynamics/rk4_derivs.o ED/src/dynamics/rk4_misc.o ED/src/memory/canopy_radiation_coms.o ED/src/memory/rk4_coms.o ED/src/memory/ed_state_vars.o ED/src/memory/ed_misc_coms.o ED/src/memory/grid_coms.o ED/src/memory/soil_coms.o ED/src/memory/consts_coms.o ED/src/utils/therm_lib8.o ED/src/memory/ed_max_dims.o ED/src/memory/canopy_air_coms.o ED/src/memory/physiology_coms.o ED/src/mpi/ed_para_coms.o ED/src/memory/canopy_layer_coms.o ED/src/memory/c34constants.o ED/src/memory/hydrology_coms.o
+ED/src/utils/update_derived_utils.o: ED/src/utils/allometry.o ED/src/utils/therm_lib.o ED/src/utils/fatal_error.o ED/src/utils/ed_therm_lib.o ED/src/utils/invmondays.o ED/src/memory/ed_state_vars.o ED/src/memory/pft_coms.o ED/src/memory/physiology_coms.o ED/src/memory/consts_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/detailed_coms.o ED/src/memory/phenology_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/canopy_air_coms.o ED/src/memory/soil_coms.o ED/src/memory/grid_coms.o ED/src/memory/fusion_fission_coms.o ED/src/memory/canopy_radiation_coms.o
+ED/src/memory/ed_var_tables.o: ED/src/utils/charutils.o ED/src/utils/fatal_error.o ED/src/memory/ed_max_dims.o
+ED/src/dynamics/photosyn_driv.o: ED/src/dynamics/farq_leuning.o ED/src/dynamics/farq_katul.o ED/src/memory/ed_state_vars.o ED/src/memory/ed_max_dims.o ED/src/memory/pft_coms.o ED/src/memory/soil_coms.o ED/src/memory/consts_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/met_driver_coms.o ED/src/memory/canopy_air_coms.o ED/src/memory/physiology_coms.o ED/src/utils/allometry.o ED/src/utils/therm_lib.o ED/src/memory/rk4_coms.o
+ED/src/io/ed_xml_config.o: ED/src/utils/libxml2f90.f90_pp.o ED/src/utils/fatal_error.o ED/src/memory/pft_coms.o ED/src/memory/hydrology_coms.o ED/src/memory/met_driver_coms.o ED/src/memory/canopy_radiation_coms.o ED/src/memory/disturb_coms.o ED/src/memory/phenology_coms.o ED/src/memory/physiology_coms.o ED/src/memory/decomp_coms.o ED/src/memory/fusion_fission_coms.o ED/src/memory/grid_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/canopy_air_coms.o ED/src/memory/soil_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/rk4_coms.o ED/src/utils/budget_utils.o
+ED/src/memory/convert_ascii.o: ED/src/utils/hdf5_utils.o ED/src/memory/hdf5_utils_f.o
+ED/src/memory/phenology_coms.o: ED/src/memory/ed_max_dims.o
+ED/src/dynamics/growth_balive.o: ED/src/dynamics/plant_hydro.o ED/src/dynamics/mortality.o ED/src/utils/allometry.o ED/src/utils/ed_therm_lib.o ED/src/utils/stable_cohorts.o ED/src/utils/budget_utils.o ED/src/utils/fuse_fiss_utils.o ED/src/utils/update_derived_utils.o ED/src/utils/fatal_error.o ED/src/memory/ed_state_vars.o ED/src/memory/met_driver_coms.o ED/src/memory/pft_coms.o ED/src/memory/physiology_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/consts_coms.o ED/src/memory/ed_max_dims.o
+ED/src/memory/disturb_coms.o: ED/src/memory/ed_max_dims.o
+ED/src/memory/decomp_coms.o: 
+ED/src/memory/grid_coms.o: ED/src/memory/ed_max_dims.o
+ED/src/memory/c34constants.o: 
+ED/src/memory/ed_misc_coms.o: ED/src/memory/ed_max_dims.o
+ED/src/dynamics/canopy_struct_dynamics.o: ED/src/memory/canopy_layer_coms.o ED/src/memory/ed_state_vars.o ED/src/memory/met_driver_coms.o ED/src/memory/canopy_air_coms.o ED/src/memory/consts_coms.o ED/src/memory/soil_coms.o ED/src/memory/rk4_coms.o ED/src/memory/grid_coms.o ED/src/memory/pft_coms.o ED/src/utils/allometry.o ED/src/memory/ed_misc_coms.o ED/src/memory/phenology_coms.o ED/src/memory/physiology_coms.o
+ED/src/io/ed_init_history.o: ED/src/utils/utils_f.o ED/src/utils/fatal_error.o ED/src/memory/ed_state_vars.o ED/src/memory/ed_max_dims.o ED/src/memory/ed_misc_coms.o ED/src/memory/soil_coms.o ED/src/memory/grid_coms.o ED/src/init/phenology_startup.o ED/src/mpi/ed_node_coms.o ED/src/memory/hdf5_coms.o ED/src/init/landuse_init.o ED/src/memory/fusion_fission_coms.o
+ED/src/dynamics/stem_resp_driv.o: ED/src/memory/ed_state_vars.o ED/src/memory/pft_coms.o ED/src/memory/consts_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/physiology_coms.o ED/src/dynamics/farq_leuning.o ED/src/memory/rk4_coms.o
+ED/src/memory/ed_work_vars.o: ED/src/memory/ed_max_dims.o
+ED/src/memory/physiology_coms.o: ED/src/memory/ed_max_dims.o
+ED/src/dynamics/radiate_driver.o: ED/src/utils/radiate_utils.o ED/src/dynamics/old_twostream_rad.o ED/src/dynamics/multiple_scatter.o ED/src/dynamics/twostream_rad.o ED/src/memory/ed_misc_coms.o ED/src/memory/ed_state_vars.o ED/src/mpi/ed_para_coms.o ED/src/memory/canopy_radiation_coms.o ED/src/memory/consts_coms.o ED/src/memory/grid_coms.o ED/src/memory/canopy_layer_coms.o ED/src/memory/soil_coms.o ED/src/memory/ed_max_dims.o ED/src/utils/allometry.o ED/src/memory/rk4_coms.o
+ED/src/dynamics/farq_katul.o: ED/src/dynamics/farq_leuning.o ED/src/memory/rk4_coms.o ED/src/memory/c34constants.o ED/src/memory/pft_coms.o ED/src/memory/consts_coms.o ED/src/memory/physiology_coms.o ED/src/memory/ed_misc_coms.o
+ED/src/dynamics/fire.o: ED/src/utils/invmondays.o ED/src/memory/ed_state_vars.o ED/src/memory/ed_misc_coms.o ED/src/memory/grid_coms.o ED/src/memory/soil_coms.o ED/src/memory/pft_coms.o ED/src/memory/disturb_coms.o ED/src/memory/consts_coms.o
+ED/src/io/edio.o: ED/src/io/average_utils.o ED/src/io/ed_print.o ED/src/io/h5_output.o ED/src/memory/ed_state_vars.o ED/src/memory/grid_coms.o ED/src/memory/ed_misc_coms.o
+ED/src/utils/fuse_fiss_utils.o: ED/src/memory/ed_state_vars.o ED/src/utils/fatal_error.o ED/src/utils/update_derived_utils.o ED/src/utils/ed_therm_lib.o ED/src/utils/stable_cohorts.o ED/src/dynamics/plant_hydro.o ED/src/utils/therm_lib.o ED/src/init/ed_type_init.o ED/src/memory/pft_coms.o ED/src/memory/fusion_fission_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/rk4_coms.o ED/src/memory/met_driver_coms.o ED/src/utils/allometry.o ED/src/memory/disturb_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/mem_polygons.o ED/src/memory/consts_coms.o ED/src/memory/grid_coms.o ED/src/mpi/ed_node_coms.o ED/src/memory/soil_coms.o ED/src/utils/budget_utils.o
+ED/src/init/phenology_startup.o: ED/src/utils/fatal_error.o ED/src/utils/ed_filelist.o ED/src/dynamics/phenology_aux.o ED/src/memory/phenology_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/ed_state_vars.o ED/src/memory/grid_coms.o
+ED/src/utils/hdf5_utils.o: ED/src/utils/fatal_error.o ED/src/memory/hdf5_coms.o
+ED/src/io/h5_output.o: ED/src/utils/dateutils.o ED/src/utils/utils_f.o ED/src/utils/fatal_error.o ED/src/memory/ed_var_tables.o ED/src/memory/ed_misc_coms.o ED/src/memory/grid_coms.o ED/src/memory/hdf5_coms.o ED/src/mpi/ed_node_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/ed_state_vars.o ED/src/memory/fusion_fission_coms.o
+ED/src/utils/ed_cn_utils.o: ED/src/memory/ed_state_vars.o ED/src/memory/ed_max_dims.o ED/src/memory/pft_coms.o
+ED/src/utils/therm_lib8.o: ED/src/utils/fatal_error.o ED/src/utils/therm_lib.o ED/src/memory/consts_coms.o
+ED/src/io/ed_read_ed21_history.o: ED/src/utils/fatal_error.o ED/src/io/ed_init_history.o ED/src/memory/ed_state_vars.o ED/src/init/ed_init.o ED/src/utils/numutils.o ED/src/utils/update_derived_utils.o ED/src/utils/allometry.o ED/src/init/ed_type_init.o ED/src/utils/fuse_fiss_utils.o ED/src/utils/ed_filelist.o ED/src/memory/ed_max_dims.o ED/src/memory/pft_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/met_driver_coms.o ED/src/memory/grid_coms.o ED/src/memory/consts_coms.o ED/src/memory/hdf5_coms.o ED/src/memory/disturb_coms.o ED/src/memory/decomp_coms.o ED/src/memory/phenology_coms.o ED/src/memory/physiology_coms.o ED/src/memory/soil_coms.o
+ED/src/memory/ename_coms.o: ED/src/memory/ed_max_dims.o
+ED/src/memory/canopy_air_coms.o: ED/src/utils/fatal_error.o ED/src/memory/consts_coms.o ED/src/utils/therm_lib8.o
+ED/src/dynamics/multiple_scatter.o: ED/src/utils/numutils.o ED/src/utils/fatal_error.o ED/src/memory/ed_max_dims.o ED/src/memory/rk4_coms.o ED/src/memory/canopy_radiation_coms.o ED/src/memory/consts_coms.o
+ED/src/utils/ed_therm_lib.o: ED/src/utils/therm_lib.o ED/src/utils/fatal_error.o ED/src/memory/consts_coms.o ED/src/memory/pft_coms.o ED/src/memory/rk4_coms.o ED/src/memory/ed_state_vars.o ED/src/memory/ed_misc_coms.o ED/src/memory/canopy_air_coms.o ED/src/memory/soil_coms.o ED/src/memory/ed_max_dims.o ED/src/utils/therm_lib8.o ED/src/memory/grid_coms.o
+ED/src/utils/random_utils.o: ED/src/utils/fatal_error.o
+ED/src/driver/ed_driver.o: ED/src/utils/random_utils.o ED/src/init/ed_params.o ED/src/utils/hrzshade_utils.o ED/src/memory/soil_coms.o ED/src/init/ed_init.o ED/src/io/ed_init_history.o ED/src/driver/ed_met_driver.o ED/src/init/ed_init_atm.o ED/src/dynamics/lsm_hyd.o ED/src/utils/update_derived_utils.o ED/src/dynamics/phenology_aux.o ED/src/utils/rsys.o ED/src/driver/ed_model.o ED/src/utils/fatal_error.o ED/src/utils/fuse_fiss_utils.o ED/src/memory/grid_coms.o ED/src/memory/ed_state_vars.o ED/src/memory/ed_misc_coms.o ED/src/mpi/ed_node_coms.o ED/src/memory/detailed_coms.o ED/src/memory/canopy_radiation_coms.o ED/src/memory/consts_coms.o
+ED/src/init/ed_nbg_init.o: ED/src/memory/ed_state_vars.o ED/src/init/ed_type_init.o ED/src/utils/allometry.o ED/src/utils/fuse_fiss_utils.o ED/src/utils/fatal_error.o ED/src/memory/grid_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/physiology_coms.o ED/src/memory/decomp_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/pft_coms.o ED/src/memory/consts_coms.o
+ED/src/io/leaf_database.o: ED/src/utils/hdf5_utils.o ED/src/memory/hdf5_utils_f.o ED/src/utils/fatal_error.o ED/src/utils/numutils.o ED/src/memory/soil_coms.o ED/src/memory/grid_coms.o
+ED/src/dynamics/phenology_driv.o: ED/src/dynamics/phenology_aux.o ED/src/utils/allometry.o ED/src/utils/ed_therm_lib.o ED/src/dynamics/plant_hydro.o ED/src/utils/stable_cohorts.o ED/src/utils/fatal_error.o ED/src/memory/ed_state_vars.o ED/src/memory/phenology_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/grid_coms.o ED/src/memory/pft_coms.o ED/src/memory/consts_coms.o ED/src/utils/therm_lib.o ED/src/memory/ed_max_dims.o ED/src/utils/budget_utils.o
+ED/src/dynamics/events.o: ED/src/utils/libxml2f90.f90_pp.o ED/src/io/ed_xml_config.o ED/src/utils/allometry.o ED/src/utils/ed_therm_lib.o ED/src/dynamics/plant_hydro.o ED/src/utils/stable_cohorts.o ED/src/utils/fuse_fiss_utils.o ED/src/utils/update_derived_utils.o ED/src/dynamics/disturbance.o ED/src/init/ed_type_init.o ED/src/dynamics/rk4_integ_utils.o ED/src/utils/therm_lib.o ED/src/memory/ed_misc_coms.o ED/src/memory/grid_coms.o ED/src/memory/ed_state_vars.o ED/src/memory/met_driver_coms.o ED/src/memory/pft_coms.o ED/src/memory/consts_coms.o
+ED/src/memory/rk4_coms.o: ED/src/memory/ed_max_dims.o ED/src/memory/grid_coms.o
+ED/src/dynamics/twostream_rad.o: ED/src/utils/numutils.o ED/src/utils/fatal_error.o ED/src/memory/ed_max_dims.o ED/src/memory/rk4_coms.o ED/src/memory/canopy_radiation_coms.o ED/src/memory/consts_coms.o
+ED/src/memory/hydrology_coms.o: 
+ED/src/memory/soil_coms.o: ED/src/utils/fatal_error.o ED/src/memory/ed_max_dims.o ED/src/memory/grid_coms.o ED/src/memory/consts_coms.o
+ED/src/utils/stable_cohorts.o: ED/src/dynamics/plant_hydro.o ED/src/utils/ed_therm_lib.o ED/src/memory/ed_state_vars.o ED/src/memory/pft_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/ed_misc_coms.o ED/src/memory/physiology_coms.o ED/src/utils/allometry.o
+ED/src/utils/invmondays.o: ED/src/memory/ed_misc_coms.o
+ED/src/utils/lapse.o: ED/src/utils/fatal_error.o ED/src/memory/ed_state_vars.o ED/src/memory/consts_coms.o ED/src/memory/met_driver_coms.o ED/src/memory/ed_misc_coms.o
+ED/src/dynamics/forestry.o: ED/src/memory/ed_state_vars.o ED/src/memory/disturb_coms.o ED/src/utils/fuse_fiss_utils.o ED/src/memory/ed_max_dims.o ED/src/memory/detailed_coms.o ED/src/memory/consts_coms.o
+ED/src/utils/hrzshade_utils.o: ED/src/utils/fatal_error.o ED/src/utils/random_utils.o ED/src/memory/ed_state_vars.o ED/src/memory/canopy_radiation_coms.o ED/src/memory/disturb_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/ed_misc_coms.o ED/src/utils/allometry.o ED/src/memory/pft_coms.o ED/src/memory/consts_coms.o ED/src/memory/rk4_coms.o
+ED/src/driver/ed_model.o: ED/src/memory/rk4_coms.o ED/src/io/average_utils.o ED/src/dynamics/rk4_integ_utils.o ED/src/utils/budget_utils.o ED/src/init/ed_type_init.o ED/src/utils/stable_cohorts.o ED/src/dynamics/soil_respiration.o ED/src/io/h5_output.o ED/src/utils/rsys.o ED/src/dynamics/radiate_driver.o ED/src/dynamics/euler_driver.o ED/src/dynamics/rk4_driver.o ED/src/dynamics/heun_driver.o ED/src/dynamics/hybrid_driver.o ED/src/utils/update_derived_utils.o ED/src/init/ed_init.o ED/src/utils/invmondays.o ED/src/dynamics/vegetation_dynamics.o ED/src/io/edio.o ED/src/driver/ed_met_driver.o ED/src/dynamics/lsm_hyd.o ED/src/memory/ed_misc_coms.o ED/src/memory/grid_coms.o ED/src/memory/ed_state_vars.o ED/src/mpi/ed_node_coms.o ED/src/memory/mem_polygons.o ED/src/memory/consts_coms.o
+ED/src/dynamics/phenology_aux.o: ED/src/utils/allometry.o ED/src/utils/ed_therm_lib.o ED/src/dynamics/plant_hydro.o ED/src/utils/stable_cohorts.o ED/src/memory/phenology_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/pft_coms.o ED/src/memory/ed_state_vars.o ED/src/memory/ed_misc_coms.o ED/src/memory/consts_coms.o ED/src/memory/grid_coms.o ED/src/utils/therm_lib.o ED/src/memory/soil_coms.o ED/src/memory/physiology_coms.o
+ED/src/memory/consts_coms.o: 
+ED/src/utils/rsys.o: 
+ED/src/driver/edmain.o: ED/src/utils/fatal_error.o ED/src/utils/rsys.o ED/src/driver/ed_1st.o ED/src/driver/ed_driver.o
+ED/src/memory/hdf5_utils_f.o: ED/src/memory/hdf5_coms.o
+ED/src/memory/detailed_coms.o: 
+ED/src/io/ed_print.o: ED/src/utils/fatal_error.o ED/src/mpi/ed_node_coms.o ED/src/memory/ed_state_vars.o ED/src/memory/ed_misc_coms.o ED/src/memory/ed_var_tables.o ED/src/memory/ed_max_dims.o
+ED/src/utils/allometry.o: ED/src/utils/fatal_error.o ED/src/memory/pft_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/ed_state_vars.o ED/src/memory/consts_coms.o ED/src/memory/grid_coms.o ED/src/memory/soil_coms.o ED/src/utils/therm_lib.o ED/src/memory/rk4_coms.o
+ED/src/utils/utils_f.o: ED/src/utils/rsys.o ED/src/utils/dateutils.o
+ED/src/dynamics/euler_driver.o: ED/src/dynamics/rk4_integ_utils.o ED/src/memory/rk4_coms.o ED/src/dynamics/rk4_misc.o ED/src/dynamics/plant_hydro.o ED/src/dynamics/photosyn_driv.o ED/src/dynamics/stem_resp_driv.o ED/src/dynamics/soil_respiration.o ED/src/utils/budget_utils.o ED/src/dynamics/rk4_copy_patch.o ED/src/utils/update_derived_utils.o ED/src/dynamics/rk4_derivs.o ED/src/mpi/ed_para_coms.o ED/src/memory/ed_state_vars.o ED/src/memory/met_driver_coms.o ED/src/memory/grid_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/ed_max_dims.o ED/src/utils/therm_lib.o ED/src/memory/soil_coms.o ED/src/memory/consts_coms.o ED/src/utils/therm_lib8.o
+ED/src/memory/met_driver_coms.o: ED/src/memory/ed_max_dims.o
+ED/src/memory/mem_polygons.o: ED/src/memory/ed_max_dims.o
+ED/src/utils/great_circle.o: ED/src/memory/consts_coms.o
+ED/src/memory/pft_coms.o: ED/src/memory/ed_max_dims.o
+ED/src/dynamics/rk4_driver.o: ED/src/dynamics/rk4_integ_utils.o ED/src/memory/rk4_coms.o ED/src/dynamics/rk4_misc.o ED/src/dynamics/plant_hydro.o ED/src/dynamics/photosyn_driv.o ED/src/dynamics/stem_resp_driv.o ED/src/dynamics/soil_respiration.o ED/src/utils/budget_utils.o ED/src/dynamics/rk4_copy_patch.o ED/src/utils/update_derived_utils.o ED/src/mpi/ed_para_coms.o ED/src/memory/ed_state_vars.o ED/src/memory/met_driver_coms.o ED/src/memory/grid_coms.o ED/src/memory/ed_misc_coms.o ED/src/utils/therm_lib.o
+ED/src/mpi/ed_para_init.o: ED/src/memory/ed_work_vars.o ED/src/utils/ed_grid.o ED/src/utils/fatal_error.o ED/src/io/leaf_database.o ED/src/utils/utils_f.o ED/src/utils/ed_filelist.o ED/src/io/ed_init_history.o ED/src/memory/grid_coms.o ED/src/mpi/ed_node_coms.o ED/src/mpi/ed_para_coms.o ED/src/memory/mem_polygons.o ED/src/memory/soil_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/hdf5_coms.o
+ED/src/utils/therm_lib.o: ED/src/utils/fatal_error.o ED/src/memory/consts_coms.o
+ED/src/utils/budget_utils.o: ED/src/utils/fatal_error.o ED/src/memory/ed_state_vars.o ED/src/memory/consts_coms.o ED/src/memory/ed_misc_coms.o ED/src/memory/ed_max_dims.o ED/src/memory/rk4_coms.o ED/src/utils/therm_lib.o ED/src/memory/grid_coms.o ED/src/memory/soil_coms.o
+ED/src/memory/ed_max_dims.o: 
